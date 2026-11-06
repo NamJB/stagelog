@@ -34,7 +34,7 @@ public class Member {
     private String email;
 
     @Builder
-    private Member(Long id,String loginId,String password,String name,LocalDate birthDate,String email) {
+    private Member(long id,String loginId,String password,String name,LocalDate birthDate,String email) {
 
         this.id = id;
         this.loginId = loginId;
