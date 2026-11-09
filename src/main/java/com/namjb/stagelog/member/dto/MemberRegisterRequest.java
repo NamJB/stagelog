@@ -1,6 +1,7 @@
 package com.namjb.stagelog.member.dto;
 
 
+import com.namjb.stagelog.member.entity.Member;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,5 +33,16 @@ public class MemberRegisterRequest {
     @Past(message = "유효한 날짜를 입력하세요")
     private LocalDate birthDate;
 
+    public Member toMemberEntity() {
+
+        return  Member.builder()
+                .loginId(this.getLoginId())
+                .password(this.getPassword())
+                .name(this.getName())
+                .birthDate(this.getBirthDate())
+                .email(this.email)
+                .build();
+
+    }
 
 }
