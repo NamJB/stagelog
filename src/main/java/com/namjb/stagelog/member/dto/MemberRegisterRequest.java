@@ -33,11 +33,11 @@ public class MemberRegisterRequest {
     @Past(message = "유효한 날짜를 입력하세요")
     private LocalDate birthDate;
 
-    public Member toMemberEntity() {
+    public Member toMemberEntity(String encodedPassword) {
 
         return  Member.builder()
                 .loginId(this.getLoginId())
-                .password(this.getPassword())
+                .password(encodedPassword)
                 .name(this.getName())
                 .birthDate(this.getBirthDate())
                 .email(this.email)

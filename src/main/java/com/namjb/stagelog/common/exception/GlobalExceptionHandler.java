@@ -5,6 +5,7 @@ import com.namjb.stagelog.common.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,10 +65,23 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse(
                 "INTERNAL_SERVER_ERROR",
                 "서버 오류 발생",
-                Map.of());
+                Map.of()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex){
+
+        ErrorResponse response = new ErrorResponse(
+                "LOGIN_FAILED",
+                "아이디 또는 비밀번호가 올바르지 않습니다",
+                Map.of()
+        );
+        
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 }

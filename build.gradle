@@ -19,14 +19,14 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
-	//testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testCompileOnly 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -34,8 +34,17 @@ dependencies {
 	//env
 	implementation 'io.github.cdimascio:dotenv-java:2.2.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// 코드에서 사용할 JWT 생성·검증 API
+	implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+
+    // 실행 시 JWT 기능을 실제로 수행하는 구현체
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
+
+    // JWT 내부 데이터를 JSON으로 변환하고 읽는 기능
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

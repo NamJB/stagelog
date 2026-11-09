@@ -1,5 +1,7 @@
 package com.namjb.stagelog.member.controller;
 
+import com.namjb.stagelog.common.dto.TokenInfo;
+import com.namjb.stagelog.member.dto.MemberLoginRequest;
 import com.namjb.stagelog.member.dto.MemberRegisterRequest;
 import com.namjb.stagelog.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -15,15 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberApiController {
 
-    private final MemberService memberServie;
+    private final MemberService memberService;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody @Valid MemberRegisterRequest request){
 
 
 
-        return ResponseEntity.ok(memberServie.signUp(request));
+        return ResponseEntity.ok(memberService.signUp(request));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenInfo> login(@RequestBody @Valid MemberLoginRequest request){
+
+        return ResponseEntity.ok(memberService.login(request));
+    }
+
 
 
 
