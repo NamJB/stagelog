@@ -1,5 +1,7 @@
 package com.namjb.stagelog.common.config;
 
+import com.namjb.stagelog.common.authority.JwtAuthenticationFilter;
+import com.namjb.stagelog.common.authority.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,13 +14,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,JwtTokenProvider jwtTokenProvider) {
 
         http
                 .csrf(csrf -> csrf.disable())
@@ -31,7 +34,11 @@ public class SecurityConfig {
                                 "/api/member/signup",
                                 "/api/member/login")
                         .permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated())
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class
+
 
                 );
 
@@ -60,4 +67,6 @@ public class SecurityConfig {
         // 서비스에서 인증을 요청할 수 있는 객체를 반환
         return new ProviderManager(provider);
     }
+
+
 }

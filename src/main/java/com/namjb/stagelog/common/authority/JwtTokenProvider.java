@@ -1,12 +1,15 @@
 package com.namjb.stagelog.common.authority;
 
 import com.namjb.stagelog.common.dto.TokenInfo;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -51,6 +54,34 @@ public class JwtTokenProvider {
                 .compact(); //최종 jwt 문자열 생성
 
         return new TokenInfo("Bearer",token);
+    }
+
+    public Claims getClaims(String token) {
+
+        return Jwts.parser()
+                .verifyWith(secretKey) // 서버의 비밀키로 서명검증
+                .build()  //검사 도구 생성
+                .parseSignedClaims(token) //토큰 해석 및 만료 여부 검사
+                .getPayload();  //검증된 토큰 내용반환
+    }
+
+    public Authentication getAuthentication(String token) {
+
+        Claims claims  = getClaims(token);
+
+        var authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(
+                claims.get("auth",String.class)
+        );
+
+        var principal =  new User(claims.getSubject(),"", authorities);
+
+        //사용자 정보와 권한을 담아서 인증 완료 객체를 반환
+        return new UsernamePasswordAuthenticationToken(
+                principal, // 누가 요청했는지
+                "",  // 토큰으로 확인후 비번 필요 x
+                authorities //어떤권한이 있ㄴ느지
+        );
+
     }
 
 }
