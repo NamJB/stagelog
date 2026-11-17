@@ -31,15 +31,7 @@ public class MemberApiController {
         return ResponseEntity.ok(memberService.login(request));
     }
 
-    // GET /api/member/me 요청을 처리해요.
-    // SecurityConfig의 authenticated() 규칙 때문에 인증이 필요해요.
-    @GetMapping("/me")
-    public ResponseEntity<String> me(Authentication authentication) {
 
-        // Spring이 SecurityContext에 있는 인증 객체를 매개변수로 전달해요.
-        // getName()으로 JWT에 담았던 로그인 아이디를 가져와 응답해요.
-        return ResponseEntity.ok(authentication.getName());
-    }
 
 
 
