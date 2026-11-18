@@ -66,4 +66,9 @@ public class MemberService {
         return jwtTokenProvider.createToken(authentication);
     }
 
+    public Optional<String> findMemberName(String loginId) {
+
+        return memberRepository.findByLoginId(loginId).map(Member::getName);
+    }
+
 }

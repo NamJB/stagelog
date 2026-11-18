@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h1>StageLog</h1>
+<a id = "loginLink" href = "/member/login.html">로그인</a>
+
+<p id = "welcomeMessage"></p>
+<section id = "myBands" hidden>
+    <h2>my밴드</h2>
+</section>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+   const accessToken = sessionStorage.getItem("accessToken")
+
+   if(accessToken) {
+       $.ajax({
+           url:"/api/member/me",
+           method : "GET",
+           headers : {Authorization : "Bearer " + accessToken},
+           success : function(result) {
+
+               $("#welcomeMessage").text(result.name + "님, 환영합니다");
+               $("#loginLink").prop("hidden",true);
+               $("#myBands").prop("hidden",false);
+           }
+       })
+
+   }
+</script>
+
+</body>
+</html>

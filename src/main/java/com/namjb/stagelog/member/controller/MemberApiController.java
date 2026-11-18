@@ -6,9 +6,12 @@ import com.namjb.stagelog.member.dto.MemberRegisterRequest;
 import com.namjb.stagelog.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/member")
@@ -31,7 +34,13 @@ public class MemberApiController {
         return ResponseEntity.ok(memberService.login(request));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<Map<String,String>> me (Authentication authentication){
 
+        return ResponseEntity.of(memberService.findMemberName(authentication.getName())
+                .map(name -> Map.of("name",name))
+        );
+    }
 
 
 
