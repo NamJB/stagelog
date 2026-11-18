@@ -34,9 +34,14 @@ public class Member {
     private String email;
 
     @Builder
-    private Member(long id,String loginId,String password,String name,LocalDate birthDate,String email) {
+    private Member(
+            String loginId,
+            String password,
+            String name,
+            LocalDate birthDate,
+            String email
+    ) {
 
-        this.id = id;
         this.loginId = loginId;
         this.password = password;
         this.name = name;
