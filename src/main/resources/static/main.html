@@ -6,16 +6,17 @@
 </head>
 <body>
   <h1>StageLog</h1>
+<button id = "logoutButton" type = "button">로그아웃 </button>
+<a id = "signupLink" href = "/member/signup.html">회원가입</a>
 <a id = "loginLink" href = "/member/login.html">로그인</a>
-
 <p id = "welcomeMessage"></p>
-<section id = "myBands" hidden>
+<section class = "myBands" hidden>
     <h2>my밴드</h2>
 </section>
 
 
 
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
    const accessToken = sessionStorage.getItem("accessToken")
 
@@ -27,12 +28,20 @@
            success : function(result) {
 
                $("#welcomeMessage").text(result.name + "님, 환영합니다");
+               $("#signupLink").prop("hidden",true);
                $("#loginLink").prop("hidden",true);
-               $("#myBands").prop("hidden",false);
+               $(".myBands").prop("hidden",false);
            }
        })
 
    }
+
+   $("#logoutButton").on("click",function(){
+
+       sessionStorage.removeItem("accessToken");
+
+       window.location.reload();
+   });
 </script>
 
 </body>
