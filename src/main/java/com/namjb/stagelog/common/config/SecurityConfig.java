@@ -30,6 +30,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET,
+                                "/member/login.html",
+                                "/main.html")
+                        .permitAll()
+
                         .requestMatchers(HttpMethod.POST,
                                 "/api/member/signup",
                                 "/api/member/login")

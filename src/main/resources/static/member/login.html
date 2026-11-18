@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+   <h1>StageLog 로그인</h1>
+
+   <label for="loginId">아이디</label>
+   <input id = "loginId" type = "text">
+
+   <label for = "password">비밀번호</label>
+   <input id = "password" type = "password">
+
+   <button id = "loginButton" type = "button">로그인</button>
+   <p id = "loginMessage"></p>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    let accessToken = null;
+
+    $("#loginButton").on("click",function(){
+
+        const loginId = $("#loginId").val();
+        const password = $("#password").val();
+
+        $.ajax({
+            url: "/api/member/login",
+            method : "POST",
+            contentType : "application/json",
+            data : JSON.stringify({loginId : loginId, password : password}),
+
+            success : function(result) {
+                sessionStorage.setItem("accessToken",result.accessToken)
+                window.location.href = "/main.html";
+                $("#loginMessage").text("로그인성공")
+            },
+            error : function() {
+                $("#loginMessage").text("로그인에 실패");
+            }
+
+        });
+
+    });
+
+
+</script>
+
+</body>
