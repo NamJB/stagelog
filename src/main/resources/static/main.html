@@ -6,11 +6,22 @@
 </head>
 <body>
   <h1>StageLog</h1>
-<button id = "logoutButton" type = "button">로그아웃 </button>
+<button id = "logoutButton" type = "button" hidden>로그아웃 </button>
 <a id = "signupLink" href = "/member/signup.html">회원가입</a>
 <a id = "loginLink" href = "/member/login.html">로그인</a>
 <p id = "welcomeMessage"></p>
-<section class = "myBands" hidden>
+
+  <section id = "bandCreateSection">
+      <form id = "bandCreateForm">
+          <label for ="bandName">밴드이름</label>
+          <input id = "bandName" type = "text" required maxlength="51">
+          <button type = "submit">밴드생성</button>
+      </form>
+      <p id = "bandCreateMessage"></p>
+  </section>
+
+
+  <section class = "myBands" hidden>
     <h2>my밴드</h2>
 </section>
 
@@ -31,6 +42,7 @@
                $("#signupLink").prop("hidden",true);
                $("#loginLink").prop("hidden",true);
                $(".myBands").prop("hidden",false);
+               $("#logoutButton").prop("hidden",false);
            }
        })
 
@@ -42,6 +54,47 @@
 
        window.location.reload();
    });
+
+   $("#bandCreateForm").on("submit",function(event){
+       event.preventDefault();
+
+       if(!accessToken) {
+           window.location.href = "/member/login.html";
+           return;
+       }
+
+       const name = $("#bandName").val().trim();
+       if(!name) {
+           $("#bandCreateMessage").text("밴드이름 입력");
+       }
+
+       const $button =$(this).find("button[type ='submit']");
+       $button.prop("disabled",true);
+
+       $.ajax({
+           url : "/api/bands",
+           method : "POST",
+           headers: {Authorization: "Bearer " + accessToken},
+           contentType : "application/json",
+           data : JSON.stringify({name : name}),
+           success:function(result) {
+
+               $("#bandCreateMessage").text(result.name + "밴드가 생성되었습니다");
+               $("#bandName").val("");
+           },
+           error: function(xhr) {
+
+               const message = xhr.responseJSON?.error?.name
+                   ?? xhr.responseJSON?.message
+                   ?? "밴드를 생성하지 못했습니다";
+               $("#bandCreateMessage").text(message);
+           },
+           complete: function () {
+               $button.prop("disabled", false);
+           }
+
+       });
+   })
 </script>
 
 </body>
