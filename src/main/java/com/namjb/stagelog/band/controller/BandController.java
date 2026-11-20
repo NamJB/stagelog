@@ -3,7 +3,9 @@ package com.namjb.stagelog.band.controller;
 
 import com.namjb.stagelog.band.dto.BandCreateRequest;
 import com.namjb.stagelog.band.dto.BandCreateResponse;
+import com.namjb.stagelog.band.dto.BandInviteResponse;
 import com.namjb.stagelog.band.dto.MyBandListItemResponse;
+import com.namjb.stagelog.band.entity.BandInvite;
 import com.namjb.stagelog.band.service.BandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,18 @@ public class BandController {
         String loginId = authentication.getName();
 
         return bandService.findMyBands(loginId);
+    }
+
+    @PostMapping("/{bandId}/invite")
+    public BandInviteResponse getInvite(
+            @PathVariable("bandId") long bandId,
+            Authentication authentication
+    ) {
+        String loginId = authentication.getName();
+        BandInvite invite = bandService.getInvite(bandId,loginId);
+
+        return new BandInviteResponse(invite.getCode(),invite.getExpiresAt());
+
     }
 
 
