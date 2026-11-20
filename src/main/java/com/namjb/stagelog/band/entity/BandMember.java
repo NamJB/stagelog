@@ -34,11 +34,36 @@ public class BandMember {
     @Column(name ="join_at",nullable = false)
     private Instant joinedAt;
 
+    //탈퇴날짜
+    @Column(name ="left_at")
+    private Instant leftAt;
+
+    //상태값
+    public enum BandMemberStatus {
+        ACTIVE,//활동중
+        LEFT,  //자진탈퇴
+        KICKED //강퇴
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BandMemberStatus status;
+
+    //소속 맴버의 기본역할 리더는 leader_id로 판단
+    public enum BandMemberRole {
+        MEMBER, //기본역할
+        MANAGER //운영진
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role",nullable = false)
+    private BandMemberRole role;
+
     public BandMember(Band band, Member member){
 
         this.band = band;
         this.member = member;
         this.joinedAt = Instant.now();
+        this.status = BandMemberStatus.ACTIVE;
+        this.role = BandMemberRole.MEMBER;
     }
 
 }

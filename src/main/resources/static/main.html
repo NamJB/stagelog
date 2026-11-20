@@ -21,8 +21,11 @@
   </section>
 
 
+
   <section class = "myBands" hidden>
     <h2>my밴드</h2>
+      <p id= "myBandMessage"></p>
+      <ul id = "myBandList"></ul>
 </section>
 
 
@@ -95,6 +98,33 @@
 
        });
    })
+
+   function loadMyBands() {
+
+       const $List = $("#myBandList").empty();
+       const $message = $("#myBandMessage").text("");
+
+       $.ajax({
+           url : "api/bands/my",
+           method : "GET",
+           headers : {Authorization : "Bearer " + accessToken},
+
+           success: function (bands) {
+               if(bands.length ===0) {
+                   $message.text("소속된 밴드가 없습니다");
+                   return;
+               }
+               bands.forEach(function(band) {
+                   $("<li>").text(band.name).append($List);
+               });
+           },
+           error : function (xhr) {
+               const message = xhr.responseJSON?.message
+                   ?? "밴드 목록을 불러오지 못했습니다.";
+               $message.text(message);
+           }
+       })
+   }
 </script>
 
 </body>
